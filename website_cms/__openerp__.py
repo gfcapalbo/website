@@ -17,8 +17,8 @@
     ],
     "data": [
         # security
-        'security/ir.model.access.csv',
         'security/groups.xml',
+        'security/ir.model.access.csv',
         # data
         "data/page_types.xml",
         "data/form_settings.xml",
