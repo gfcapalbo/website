@@ -1,0 +1,48 @@
+/* best way to  contain an image cross browser approved */
+
+div.js_smallheight
+{
+    max-height:300px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+
+div.blog_title_small
+{
+    max-height:300px;
+    border-top:0px;
+}
+
+
+div.blog_title_small h1
+{
+    font-size:32px;
+    font-weight:bold;
+    text-align:center;
+}   
+
+div.blog_title_small p
+{
+    font-size 12px;
+}
+
+
+div.thumbnail
+{
+    margin: 5px 12px 5px 5px;
+}
+
+
+.oe_preview_bk > img {
+  max-height:200px;
+  max-width: 400px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+  border: none;
+  margin-bottom: 10px;
+}
