@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="assets_backend" name="website_hr_extended assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/website_hr_extended/static/src/css/website_hr_extended.css"/>
+            </xpath>
+        </template>
+
+        <template id="employee_form_extended" inherit_id="website_hr.aboutus">
+            <xpath expr="//div[@t-foreach='employees']" position="replace">
+                <div t-foreach="employees.sorted(key=lambda a: a.position)" t-as="employee" 
+                    class="col-sm-12 col-md-6 col-lg-4 col-xl-4 text-center colsize hrequal ">
+                            <div class="thumbnail hrequal" style="height:500px">
+                                <t t-call="website.publish_management" class="text-center">
+                                    <t t-set="object" t-value="employee"/>
+                                    <t t-set="publish_edit" t-value="True"/>
+                                </t>
+                                <div class="clearfix"/>
+                                <img 
+                                    t-att-src="website.image_url(employee, 'image_medium')" 
+                                    class="img shadow img-rounded"/>
+                                <div class="caption">
+                                    <h3><strong t-field="employee.name"></strong></h3>
+                                    <p>
+                                        <div t-if="employee.bio_website">
+                                             <t t-raw="employee.bio_website"/> 
+                                        </div>
+                                    </p>
+                                    <p>
+                                        <t t-if="employee.work_email">
+                                            <a t-attf-href="mailto:{{ employee.work_email }}">                                  
+                                                <i class="fa fa-envelope-o fa-1g" aria-hidden="true">
+                                                    <span t-esc="employee.work_email"/>
+                                                </i>
+                                            </a>
+                                        </t>
+                                    </p>
+                                    <t t-if="employee.github_website">
+                                        <a t-att-href="employee.github_website" t-att-target="'_blank'">
+                                            <i class="fa fa-github fa-2x" aria-hidden="true">
+                                            </i>
+                                        </a>
+                                    </t>
+                                    <t t-if="employee.linkedin_website">
+                                        <a t-att-href="employee.linkedin_website" t-att-target="'_blank'">
+                                            <i class="fa fa-linkedin fa-2x" aria-hidden="true">
+                                            </i>
+                                        </a>
+                                    </t>
+                                    <t t-if="employee.twitter_website">
+                                        <a t-att-href="employee.twitter_website" t-att-target="'_blank'">
+                                            <i class="fa fa-twitter fa-2x" aria-hidden="true">
+                                            </i>
+                                        </a>
+                                    </t>
+                                </div>
+
+                            </div>
+                </div> 
+            </xpath>
+        </template>
+
+        <record id="res_partner_additional_website" model="ir.ui.view">
+            <field name="name"> hr.employee.extend.websiteinfo</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+                    <page name="website_employee_information" 
+                          string="Employee info for website">
+                        <group>
+                            <field name="position"/>
+                            <field name="bio_website"/>
+                            <field name="github_website"/>
+                            <field name="linkedin_website"/>
+                            <field name="twitter_website"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>

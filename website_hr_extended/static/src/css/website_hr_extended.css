@@ -1,0 +1,8 @@
+/* used to make all boxes of employees
+the same height as the longest one.
+*/
+
+
+.colsize.hrequal {
+    height: 570px;
+}
