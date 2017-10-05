@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: website (8.0)\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-06 02:53+0000\n"
-"PO-Revision-Date: 2016-05-01 20:00+0000\n"
+"POT-Creation-Date: 2017-03-25 13:32+0000\n"
+"PO-Revision-Date: 2017-03-24 18:23+0000\n"
 "Last-Translator: OCA Transbot <transbot@odoo-community.org>\n"
 "Language-Team: Spanish (http://www.transifex.com/oca/OCA-website-8-0/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -35,6 +35,16 @@ msgid "Accepted legal terms"
 msgstr "Acuerdos legales aceptados"
 
 #. module: website_signup_legal_page_required
+#: field:res.users,activation:0
+msgid "Activation"
+msgstr ""
+
+#. module: website_signup_legal_page_required
+#: field:res.users,opportunity_assigned_ids:0
+msgid "Assigned Opportunities"
+msgstr ""
+
+#. module: website_signup_legal_page_required
 #: field:res.users,property_stock_customer:0
 msgid "Customer Location"
 msgstr ""
@@ -45,9 +55,41 @@ msgid "Did the user accept our legal terms when opening the account?"
 msgstr "¿El usuario aceptó nuestros acuerdos legales cuando creó su cuenta?"
 
 #. module: website_signup_legal_page_required
+#: help:res.users,partner_weight:0
+msgid ""
+"Gives the probability to assign a lead to this partner. (0 means no "
+"assignation.)"
+msgstr ""
+
+#. module: website_signup_legal_page_required
+#: field:res.users,grade_id:0
+msgid "Grade"
+msgstr ""
+
+#. module: website_signup_legal_page_required
+#: field:res.users,partner_weight:0
+msgid "Grade Weight"
+msgstr ""
+
+#. module: website_signup_legal_page_required
 #: view:website:auth_signup.fields
 msgid "I accept the"
 msgstr "Acepto el"
+
+#. module: website_signup_legal_page_required
+#: field:res.users,implemented_partner_ids:0
+msgid "Implementation References"
+msgstr ""
+
+#. module: website_signup_legal_page_required
+#: field:res.users,assigned_partner_id:0
+msgid "Implemented by"
+msgstr ""
+
+#. module: website_signup_legal_page_required
+#: field:res.users,date_review:0
+msgid "Latest Partner Review"
+msgstr ""
 
 #. module: website_signup_legal_page_required
 #: field:res.users,opportunity_ids:0
@@ -60,14 +102,24 @@ msgid "Meetings"
 msgstr ""
 
 #. module: website_signup_legal_page_required
+#: field:res.users,date_review_next:0
+msgid "Next Partner Review"
+msgstr ""
+
+#. module: website_signup_legal_page_required
 #: field:res.users,opportunity_count:0
 msgid "Opportunity"
 msgstr ""
 
 #. module: website_signup_legal_page_required
+#: field:res.users,date_partnership:0
+msgid "Partnership Date"
+msgstr ""
+
+#. module: website_signup_legal_page_required
 #: field:res.users,phonecall_count:0 field:res.users,phonecall_ids:0
 msgid "Phonecalls"
-msgstr ""
+msgstr "Llamadas telefónicas"
 
 #. module: website_signup_legal_page_required
 #: field:res.users,website_published:0
@@ -162,4 +214,4 @@ msgstr "términos de uso"
 #. module: website_signup_legal_page_required
 #: field:res.users,self:0
 msgid "unknown"
-msgstr ""
+msgstr "desconocido"

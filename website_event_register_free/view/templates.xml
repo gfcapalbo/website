@@ -12,7 +12,7 @@
                 t-attf-action="/event/#{event.id}/register/register_free"
                 method="post"
                 class="table-responsive"
-                t-if="not hasattr(event, 'event_ticket_ids') or
+                t-if="'event_ticket_ids' not in event._fields or
                       not event.event_ticket_ids">
                 <table class="table table-striped">
                     <thead>
@@ -28,20 +28,15 @@
                                 <select
                                     name="tickets"
                                     class="form-control"
-                                    t-if="event.seats_available or
-                                          not event.seats_max">
+                                    t-if="event.seats_available or not event.seats_max">
                                     <t
-                                        t-foreach="range(
-                                            1,
-                                            min(event.seats_available or 10,
-                                                10) + 1)"
+                                        t-foreach="range(1, min(event.seats_available or 10, 10) + 1)"
                                         t-as="nb">
                                         <option t-esc="nb"/>
                                     </t>
                                 </select>
                                 <span
-                                    t-if="not event.seats_available and
-                                          event.seats_max">
+                                    t-if="not (event.seats_available or not event.seats_max)">
                                     No seats available
                                 </span>
                             </td>
@@ -78,9 +73,15 @@
                     <div class="row">
                         <div class="form-group col-lg-6">
                             <label class="control-label" for="name">Quantity</label>
-                            <select name="tickets" class="form-control" t-if="event.seats_available > 0">
-                                <t t-foreach="range(1, event.seats_available > 9 and 11 or event.seats_available + 1)" t-as="nb">
-                                    <option t-esc="nb" t-att="{'selected': 'selected'} if str(tickets) == str(nb) else {}" />
+                            <select
+                                name="tickets"
+                                class="form-control"
+                                t-if="event.seats_available or not event.seats_max">
+                                <t
+                                    t-foreach="range(1, min(event.seats_available or 10, 10) + 1)"
+                                    t-as="nb">
+                                    <option t-esc="nb"
+                                            t-att-selected="int(tickets) == nb and 'selected'"/>
                                 </t>
                             </select>
                         </div>
@@ -115,10 +116,19 @@
         <template id="partner_register_confirm" name="Confirmation">
             <t t-call="website.layout">
                 <div id="wrap" class="container">
-                    <h1>Thank you <span t-esc="registration.name" />!</h1>
-                    Your registration for <span t-esc="registration.event_id.name" /> succeeded!
+                    <t t-call="website_event_register_free.confirm_message"/>
                 </div>
             </t>
+        </template>
+
+        <template id="confirm_message"
+                  name="Registration Succeeded Message">
+            <div class="alert alert-success">
+                <h3>Thank you <span t-esc="registration.name" />!</h3>
+                Your free registration for
+                <strong t-esc="registration.event_id.name" />
+                succeeded!
+            </div>
         </template>
      </data>
 </openerp>

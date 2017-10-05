@@ -18,76 +18,110 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import http
-from openerp.http import request
+from openerp.http import request, route
 from openerp.addons.website_sale.controllers.main import website_sale
-from openerp.addons.website_event_register_free.controllers.website_event \
-    import WebsiteEvent
+
+from ..exceptions import NoNeedForSOError
 
 
 class WebsiteSale(website_sale):
     mandatory_free_registration_fields = ["name", "phone", "email"]
-    # TODO: Not used yet
     optional_free_registration_fields = ["street", "city", "country_id", "zip"]
 
-    def checkout_form_validate_free(self, data):
-        errors = dict()
-        if request.session.get('free_tickets'):
-            # Make validation for free tickets
-            for field_name in self.mandatory_free_registration_fields:
-                if not data.get(field_name, '').strip():
-                    errors[field_name] = 'missing'
-                elif not WebsiteEvent()._validate(field_name, data, True):
-                    # Patch for current free registration implementation
-                    errors[field_name] = 'error'
-        return errors
-
-    @http.route(['/shop/checkout'], type='http', auth="public", website=True)
-    def checkout(self, **post):
-        order = request.website.sale_get_order(force_create=0)
-        has_paid_tickets = bool(order.order_line)
-        if request.session.get('free_tickets') and not has_paid_tickets:
-            values = self.checkout_values(data={'shipping_id': -1})
-            return request.website.render("website_sale.checkout", values)
+    def _get_mandatory_billing_fields(self):
+        if self._only_free_ticket_checkout():
+            return self.mandatory_free_registration_fields
         else:
-            return super(WebsiteSale, self).checkout(**post)
+            return super(WebsiteSale, self)._get_mandatory_billing_fields()
 
-    @http.route(['/shop/confirm_order'], type='http', auth="public",
-                website=True)
-    def confirm_order(self, **post):
-        if (request.session.get('free_tickets') is None and
-                request.session.get('has_paid_tickets') is None):
-            # Handle call of this method from regular shop
-            return super(WebsiteSale, self).confirm_order(**post)
-        if request.session.get('free_tickets'):
-            values = self.checkout_values(post)
-            values['error'] = self.checkout_form_validate_free(post)
-            if values["error"]:
-                return request.website.render("website_sale.checkout", values)
-            post['tickets'] = request.session['free_tickets']
-            event = request.env['event.event'].browse(
-                int(request.session['event_id']))
-            if (http.request.env.ref('base.public_user') !=
-                    http.request.env.user):
-                partner = http.request.env.user.partner_id
-            else:
-                partner = False
-            # Use same hook as without website_sale
-            reg_obj = http.request.env['event.registration']
-            registration_vals = reg_obj._prepare_registration(
-                event, post, http.request.env.user.id, partner=partner)
-            registration = reg_obj.sudo().create(registration_vals)
+    def _get_optional_billing_fields(self):
+        if self._only_free_ticket_checkout():
+            return self.optional_free_registration_fields
+        else:
+            return super(WebsiteSale, self)._get_optional_billing_fields()
+
+    def _only_free_ticket_checkout(self):
+        """Check if we are checking out only free tickets."""
+        has_free = request.session.get("free_tickets")
+        order = request.website.sale_get_order(force_create=0)
+        has_paid = order and order.order_line
+        return has_free and not has_paid
+
+    def _register_event_free(self, post):
+        """Register current visitor in a free event.
+
+        :param dict post:
+            Used keys:
+
+            - name
+            - email
+            - phone
+
+        :raise KeyError:
+            When ``free_tickets`` is not found under
+            :class:`~request.session`, or is empty.
+
+        :raise NoNeedForSOError:
+            When there is nothing left to buy after free registrations are
+            processed. Includes the registration inside exception's
+            ``registration`` attribute.
+
+        :return openerp.Model:
+            Registrations that has been created.
+        """
+        tickets = request.session["free_tickets"]
+        if not tickets:
+            raise KeyError
+        registrations = request.env['event.registration']
+        for ticket in tickets:
+            registration_vals = registrations._prepare_registration(
+                ticket["event_id"],
+                dict(post, tickets=ticket["qty"]),
+                request.uid,
+                partner=(request.env.user != request.website.user_id and
+                         request.env.user.partner_id),
+            )
+            registration_vals["event_ticket_id"] = ticket["ticket_id"]
+            registration = registrations.sudo().create(registration_vals)
             if registration.partner_id:
                 registration._onchange_partner()
             registration.registration_open()
-        order = request.website.sale_get_order(force_create=0)
-        has_paid_tickets = bool(order.order_line)
-        if has_paid_tickets:
+            registrations |= registration
+        try:
+            if self._only_free_ticket_checkout():
+                raise NoNeedForSOError(registrations)
+        finally:
+            del request.session["free_tickets"]
+        request.session["free_registration_ids"] = registrations.ids
+        return registrations
+
+    def checkout_form_save(self, checkout):
+        """Save free registrations too."""
+        try:
+            self._register_event_free(
+                self.checkout_parse("billing", checkout, True))
+        except KeyError:
+            pass
+        return super(WebsiteSale, self).checkout_form_save(checkout)
+
+    @route()
+    def confirm_order(self, **post):
+        """Skip SO creation & payment for only-free events."""
+        try:
             return super(WebsiteSale, self).confirm_order(**post)
-        elif request.session.get('free_tickets'):
-            request.session['free_tickets'] = 0
-            return http.request.render(
+        except NoNeedForSOError as ex:
+            return request.render(
                 'website_event_register_free.partner_register_confirm',
-                {'registration': registration})
-        else:
-            return http.request.redirect('/event')
+                # No actual chance of getting multiple events or attendees, so
+                # just use the first from the recordset
+                {'registration': ex.registrations[:1]})
+
+    @route()
+    def payment(self, **post):
+        """Add free registration confirmation to page."""
+        result = super(WebsiteSale, self).payment(**post)
+        registrations = request.session.pop("free_registration_ids", None)
+        if registrations:
+            result.qcontext["free_registration"] = \
+                request.env["event.registration"].browse(registrations[0])
+        return result
