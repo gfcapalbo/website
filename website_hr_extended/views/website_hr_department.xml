@@ -12,7 +12,8 @@
             <xpath expr="//div[@t-foreach='employee_ids']" position="replace">
                 <div t-foreach="employee_ids.sorted(key=lambda a: a.position)" t-as="employee" class="col-sm-6 col-lg-5 mt16 text-center colsize">            
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-12">                
+                            <t t-call="website.publish_management"><t t-set="object" t-value="employee"/></t>
                             <div class="thumbnail" style="height:570px">
                                 <img t-att-src="website.image_url(employee, 'image_medium')" class="img shadow img-rounded"/>
                                 
