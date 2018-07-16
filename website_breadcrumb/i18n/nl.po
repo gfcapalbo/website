@@ -21,7 +21,7 @@ msgstr ""
 #. module: website_breadcrumb
 #: model:ir.ui.view,arch_db:website_breadcrumb.breadcrumb
 msgid "Home"
-msgstr "Thuis"
+msgstr "Home"
 
 #. module: website_breadcrumb
 #: model:ir.model,name:website_breadcrumb.model_website_menu
