@@ -29,7 +29,8 @@
               <div 
                   data-js="dispBlogOptions"
                   data-selector=".jq_blg_entry"
-                  >
+                  data-selector-siblings="p, h1, h2, h3, blockquote, .well, .panel, .oe_share"
+                  data-selector-children=".content">
                   <li class="oe_snippet_options dropdown-submenu">
                       <a tabindex="-1" href="#">View from blog </a>
                       <!--todo usure how to unify setting and loop tags check code -->
@@ -96,7 +97,7 @@
 
           </div>
           <div class="col-md-16" t-if="not blogpost">
-              <p>'No blog post selected , please do so by selecting fro widget configuration options'</p>
+              <p>'No blog post selected , please do so by selecting from widget configuration options'</p>
           </div>
       </template>
 
