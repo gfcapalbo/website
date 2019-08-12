@@ -11,5 +11,4 @@
     <field name="perm_unlink" eval="False"/>
   </record>
 
-
 </odoo>
