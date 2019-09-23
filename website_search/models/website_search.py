@@ -56,7 +56,7 @@ class WebsiteSearch(models.TransientModel):
                 'type': 'page',
                 'res_id': view.id,
                 'link': '/page/%s' % view.key,
-                'name': view.key,
+                'name': view.name or view.key,
             })
 
     def _get_results(self, offset, limit):
