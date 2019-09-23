@@ -49,6 +49,7 @@ class WebsiteSearch(models.TransientModel):
             ('%' + (self.name or '') + '%', '%' + (self.name or '') + '%', )
         )
         ids = [_id for _id, in self.env.cr.fetchall()]
+
         for view in self.env['ir.ui.view'].search([('id', 'in', ids)]):
             self.env['website.search.result'].create({
                 'res_model': 'ir.ui.view',
@@ -57,9 +58,12 @@ class WebsiteSearch(models.TransientModel):
                 'res_id': view.id,
                 'link': '/page/%s' % view.key,
                 'name': view.name or view.key,
+                # give higher rank if search text is in page title
+                'rank': 1 and self.name.lower() in view.name.lower() or 2,
             })
 
     def _get_results(self, offset, limit):
-        results = self.result_ids[offset:offset + limit]
+        results = self.result_ids.sorted(
+            key=lambda x: x.rank)[offset:offset + limit]
         results._compute_lazy()
         return results
