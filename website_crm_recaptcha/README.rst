@@ -69,6 +69,8 @@ Contributors
   * Jairo Llopis
   * Alexandre Díaz
 
+* Ruchir Shukla <ruchir@bizzappdev.com>
+
 Maintainers
 ~~~~~~~~~~~
 

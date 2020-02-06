@@ -5,3 +5,5 @@
   * Cristina Martin R.
   * Jairo Llopis
   * Alexandre Díaz
+
+  * Ruchir Shukla <ruchir@bizzappdev.com>
