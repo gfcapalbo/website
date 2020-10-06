@@ -10,7 +10,7 @@
     "summary": """Adds a snippet that will search for keywords globally in
                   website""",
     "depends": [
-        'website',
+        'website_sale',
     ],
     "data": [
         'views/snippets.xml',
