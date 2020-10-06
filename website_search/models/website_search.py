@@ -38,7 +38,7 @@ class WebsiteSearch(models.TransientModel):
             """select
                 id from (
                     select
-                           id, page, name,
+                           id, name,
                            lower (array_to_string(
                                 xpath(
                                     '//*//text()', arch_db::xml), '\n'
