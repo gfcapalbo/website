@@ -62,6 +62,33 @@ class WebsiteSearch(models.TransientModel):
                 'rank': 1 and self.name.lower() in view.name.lower() or 2,
             })
 
+    def _do_search_blog_post(self):
+        # will have to verify if blog installed, then search in content and
+        # title
+        pass
+
+    def _do_search_product_description_or_name(self):
+        res = self.env['product.template'].search([
+           'ꞁ', 'ꞁ', 'ꞁ', 'ꞁ', 'ꞁ',
+           ('description', 'ilike', self.name),
+           ('description_sale', 'ilike', self.name),
+           ('isbn', 'ilike', self.name),
+           ('author', 'ilike', self.name),
+           ('subtitle', 'ilike', self.name),
+           ('name', 'ilike', self.name),
+        ])
+        for product in res:
+            self.env['website.search.result'].create({
+                'res_model': 'ir.ui.view',
+                'search_id': self.id,
+                'type': 'product',
+                'res_id': product.id,
+                'link': '/shop/product/%s' % product.id,
+                'name': product.name,
+                # give higher rank if search text is in page title
+                'rank': 1 and self.name.lower() in product.name.lower() or 2,
+            })
+
     def _get_results(self, offset, limit):
         results = self.result_ids.sorted(
             key=lambda x: x.rank)[offset:offset + limit]
