@@ -38,7 +38,7 @@ class WebsiteSearch(models.TransientModel):
         pudb.set_trace()
         pages = self.env['ir.ui.view'].search([
             ('page_ids', '=', True),
-            ('website_id', '=' , self.env.context.get('website_id'),
+            ('website_id', '=' , self.env.context.get('website_id')),
         ])
         if self.env.context.get("website.id") and pages:
             self.env.cr.execute(
