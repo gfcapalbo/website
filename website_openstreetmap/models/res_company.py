@@ -40,7 +40,7 @@ class ResCompany(models.Model):
                 lat=self.gps_latitude or '',
                 lon=self.gps_longitude or '', )
         }
-        return url + '?%s' % urllib.urlencode(params)
+        return url + '?%s' % urllib.parse.urlencode(params)
 
     def get_nominatim_openstreetmap_coordinates(self):
         url = 'http://nominatim.openstreetmap.org/search'
@@ -51,7 +51,7 @@ class ResCompany(models.Model):
             'country': self.country_id.code or '',
             'postalcode': self.zip or '',
         }
-        query = urllib.urlencode(params)
+        query = urllib.parse.ulencode(params)
         req = urllib.request.urlopen(url + '?%s' % query)
         json_request = req.read()
         res = json.loads(json_request)
