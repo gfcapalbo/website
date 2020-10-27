@@ -2,7 +2,7 @@
 # © 2016 Therp BV <http://therp.nl>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 import random
-from odoo import api, fields, models
+from odoo import fields, models
 
 
 class BlogTag(models.Model):
@@ -12,7 +12,6 @@ class BlogTag(models.Model):
     min_font = 10.0
     max_font = 19.0
 
-    @api.multi
     def get_blog_most_used_tag_cardinality(self):
         tags = self.env['blog.tag'].search([])
         # NOTE setting max ranking to 1 to avoid division by 0 when there are
@@ -33,7 +32,6 @@ class BlogTag(models.Model):
         help="The number of times the most used tag is used in this blog"
     )
 
-    @api.multi
     def get_font_size(self):
         for this in self:
             hits = len(this.post_ids.ids)
@@ -43,12 +41,10 @@ class BlogTag(models.Model):
                 ) + this.min_font
             )
 
-    @api.multi
     def get_tag_cardinality(self):
         for this in self:
             this.tag_cardinality = len(this.post_ids.ids)
 
-    @api.multi
     def compute_color(self):
         for this in self:
             # green therp, darkgreen, blue, orange
