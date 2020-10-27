@@ -2,7 +2,7 @@
 
 import urllib
 import json
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, exceptions, _
 
 
 class ResCompany(models.Model):
@@ -26,7 +26,7 @@ class ResCompany(models.Model):
                 lat=self.gps_latitude or '',
                 lon=self.gps_longitude or ''),
         }
-        return url + '?%s' % urllib.urlencode(params)
+        return url + '?%s' % urllib.parse.urlencode(params)
 
     def openstreetmap_link(self, zoom=16):
         url = 'http://www.openstreetmap.org'
@@ -52,7 +52,7 @@ class ResCompany(models.Model):
             'postalcode': self.zip or '',
         }
         query = urllib.urlencode(params)
-        req = urllib.urlopen(url+'?%s' % query)
+        req = urllib.request.urlopen(url + '?%s' % query)
         json_request = req.read()
         res = json.loads(json_request)
         if not res:
@@ -69,5 +69,5 @@ class ResCompany(models.Model):
         self.write({
             'gps_longitude': res[0]['lon'],
             'gps_latitude': res[0]['lat'],
-            })
+        })
         return {}
