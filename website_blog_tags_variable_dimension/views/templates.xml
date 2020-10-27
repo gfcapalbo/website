@@ -12,7 +12,8 @@
             active="False" 
             customize_show="True">
             <!-- note keep this tag cloud allways on top  -->
-            <xpath expr="//div[@id='o_wblog_sidebar']/div[1]" position="before">
+        <xpath expr="//div[@id='o_wblog_sidebar']/div[1]" position="before">
+            <t t-if="tags">
                 <div class="o_wblog_sidebar_block pb-5">
                     <h6>Tags</h6>
                     <ul class="nav nav-pills nav-stacked blog-tagcloud">
@@ -27,6 +28,7 @@
                         </t>
                     </ul>
                 </div>
+            </t>
             </xpath>
         </template>
 </odoo>
