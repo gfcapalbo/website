@@ -13,14 +13,11 @@
             priority="2"
             customize_show="True">
         <xpath expr="//div[@id='o_wblog_sidebar']" position="inside">
-            <t t-esc="tags"></t>
-            <t t-esc="tags_list"></t>
-            <t t-esc="other_tags"></t>
             <t t-if="tags">
                 <div class="o_wblog_sidebar_block pb-5">
                     <h6>Tags</h6>
                     <ul class="nav nav-pills nav-stacked blog-tagcloud">
-                        <t t-set="random_tags" t-value="tags_list.randomize_recordset()"/>
+                        <t t-set="random_tags" t-value="tags_list"/>
                         <t t-foreach="random_tags" t-as="nav_tag">
                             <li t-attf-style="font-size: {{nav_tag.font_size_in_cloud}}px;">
                                 <a t-attf-href="#{blog_url(tag=nav_tag)}">
