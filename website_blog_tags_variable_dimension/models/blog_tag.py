@@ -73,5 +73,5 @@ class BlogTag(models.Model):
         compute=compute_color,
     )
 
-    def randomize_recordset(self,:
+    def randomize_recordset(self):
         return random.shuffle(self, len(self))
