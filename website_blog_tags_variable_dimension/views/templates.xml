@@ -9,17 +9,17 @@
         <template id="opt_blog_rc_tags_var_dim" 
             name="Variable Dimension Tag Cloud"
             inherit_id="website_blog.sidebar_blog_index" 
-            active="False" 
+            active="True" 
+            priority="2"
             customize_show="True">
-            <!-- note keep this tag cloud allways on top  -->
         <xpath expr="//div[@id='o_wblog_sidebar']" position="inside">
-            <t t-if="tags">
+            <t t-if="other_tags or tag_category">
                 <div class="o_wblog_sidebar_block pb-5">
                     <h6>Tags</h6>
                     <ul class="nav nav-pills nav-stacked blog-tagcloud">
-                        <t t-set="random_tags" t-value="tags.randomize_recordset()"/>
+                        <t t-set="random_tags" t-value="other_tags.randomize_recordset()"/>
                         <t t-foreach="random_tags" t-as="nav_tag">
-                            <li t-att-class="'active' if tag and tag.id == nav_tag.id else None" 
+                            <li t-att-class="'active' if other_tags and tag.id == nav_tag.id else None" 
                                 t-attf-style="font-size: {{nav_tag.font_size_in_cloud}}px;">
                                 <a t-attf-href="#{blog_url(tag=nav_tag)}">
                                     <span t-attf-style="color:{{nav_tag.random_color}};"><t t-esc="nav_tag.name"/> (<t t-esc="nav_tag.tag_cardinality"/>)</span>
