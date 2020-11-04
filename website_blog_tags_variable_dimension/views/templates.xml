@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-        <template id="assets_common" name="website_blog_tags_variable_dimension assets" inherit_id="web.assets_common">
+    <template id="assets_frontend_cloud" 
+        name="website_blog_tags_variable_dimension assets" 
+        inherit_id="website.assets_frontend">
             <xpath expr="." position="inside">
                 <link rel="stylesheet" href="/website_blog_tags_variable_dimension/static/src/css/website_blog_tags_variable_dimension.css"/>
             </xpath>
@@ -13,11 +15,11 @@
             priority="2"
             customize_show="True">
         <xpath expr="//div[@id='o_wblog_sidebar']" position="inside">
-            <t t-if="tags">
+            <t t-if="other_tags">
                 <div class="o_wblog_sidebar_block pb-5">
                     <h6>Tags</h6>
                     <ul class="nav nav-pills nav-stacked blog-tagcloud">
-                        <t t-set="random_tags" t-value="tags_list"/>
+                        <t t-set="random_tags" t-value="other_tags"/>
                         <t t-foreach="random_tags" t-as="nav_tag">
                             <li t-attf-style="font-size: {{nav_tag.font_size_in_cloud}}px;">
                                 <a t-attf-href="#{blog_url(tag=nav_tag)}">
