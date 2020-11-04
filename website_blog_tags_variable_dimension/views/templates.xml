@@ -13,14 +13,16 @@
             priority="2"
             customize_show="True">
         <xpath expr="//div[@id='o_wblog_sidebar']" position="inside">
-            <t t-if="other_tags or tag_category">
+            <t t-esc="tags"></t>
+            <t t-esc="tags_list"></t>
+            <t t-esc="other_tags"></t>
+            <t t-if="tags">
                 <div class="o_wblog_sidebar_block pb-5">
                     <h6>Tags</h6>
                     <ul class="nav nav-pills nav-stacked blog-tagcloud">
-                        <t t-set="random_tags" t-value="other_tags.randomize_recordset()"/>
+                        <t t-set="random_tags" t-value="tags_list.randomize_recordset()"/>
                         <t t-foreach="random_tags" t-as="nav_tag">
-                            <li t-att-class="'active' if other_tags and tag.id == nav_tag.id else None" 
-                                t-attf-style="font-size: {{nav_tag.font_size_in_cloud}}px;">
+                            <li t-attf-style="font-size: {{nav_tag.font_size_in_cloud}}px;">
                                 <a t-attf-href="#{blog_url(tag=nav_tag)}">
                                     <span t-attf-style="color:{{nav_tag.random_color}};"><t t-esc="nav_tag.name"/> (<t t-esc="nav_tag.tag_cardinality"/>)</span>
                                 </a>
