@@ -22,9 +22,11 @@ class ResCompany(models.Model):
         """
         url = 'http://osm-static-maps.herokuapp.com'
         params = {
-            'center': "{lat},{lon}".format(
+            'center': "{lon},{lat}".format(
                 lat=self.gps_latitude or '',
                 lon=self.gps_longitude or ''),
+            'height': 300,
+            'width': 300,
         }
         return url + '?%s' % urllib.parse.urlencode(params)
 
