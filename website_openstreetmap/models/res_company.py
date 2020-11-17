@@ -13,16 +13,16 @@ class ResCompany(models.Model):
     gps_latitude = fields.Char('latitude gps',)
 
     def openstreetmap_img(self, zoom=16, width=250, height=250):
+        """
         url = 'http://staticmap.openstreetmap.de/staticmap.php'
+        is not mantained anymore, using a more stable service to fetch our
+        static maps.
+        # TODO, allow for a staticmap service selection from interface, in case
+        # a service goes down.
+        """
+        url = 'http://osm-static-maps.herokuapp.com'
         params = {
             'center': "{lat},{lon}".format(
-                lat=self.gps_latitude or '',
-                lon=self.gps_longitude or ''),
-            'size': "%sx%s" % (height, width),
-            'zoom': zoom,
-            'maptype': 'mapnik',
-            'map': "{zm}/{lat}/{lon}".format(
-                zm=zoom,
                 lat=self.gps_latitude or '',
                 lon=self.gps_longitude or ''),
         }
