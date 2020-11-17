@@ -51,7 +51,7 @@ class ResCompany(models.Model):
             'country': self.country_id.code or '',
             'postalcode': self.zip or '',
         }
-        query = urllib.parse.ulencode(params)
+        query = urllib.parse.urlencode(params)
         req = urllib.request.urlopen(url + '?%s' % query)
         json_request = req.read()
         res = json.loads(json_request)
